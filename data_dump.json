@@ -1,0 +1,520 @@
+[
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$azTfcos5fVRLOCBqvnfXX4$cTDsYZEQkAyNj5fyPcXiOy6Q6P8Z0RoFu0Y2PxRJdeU=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@example.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-01-22T22:12:21.767Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$mX1ECpoWADi4fp2lZ4hMqf$Db3KauadKKmTJYm4cx8k3ybHP88sJyW7WGjMhsXN7R0=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "freddy",
+    "first_name": "",
+    "last_name": "",
+    "email": "ziojavanet@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-01-22T23:53:40.770Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$BSEDXfCTTk1uiJESsUgp1a$ZSUV2mYB0S8qhlh4dh0gn2WVBFknWIN0jvivLe9hyPY=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "invitado",
+    "first_name": "Usuario",
+    "last_name": "Invitado",
+    "email": "invitado@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-23T00:12:28.750Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.proveedor",
+  "pk": 2,
+  "fields": {
+    "nombre": "luis",
+    "direccion": "villa el salvador",
+    "telefono": "921454757",
+    "correo": "freddy@gmail.com"
+  }
+},
+{
+  "model": "api.proveedor",
+  "pk": 3,
+  "fields": {
+    "nombre": "ana",
+    "direccion": "san juan de lurigancho",
+    "telefono": "965874547",
+    "correo": "ana@gmail.com"
+  }
+},
+{
+  "model": "api.proveedor",
+  "pk": 4,
+  "fields": {
+    "nombre": "lucho",
+    "direccion": "av villa de mar",
+    "telefono": "98574587",
+    "correo": "luis_llaves@gmail.com"
+  }
+},
+{
+  "model": "api.llaves",
+  "pk": 1,
+  "fields": {
+    "cod_llave": "ya-6",
+    "cantidad": 1895,
+    "img": "llaves_img/1756039963701.jpg",
+    "proveedor": 3,
+    "precio_compra": "0.90"
+  }
+},
+{
+  "model": "api.llaves",
+  "pk": 2,
+  "fields": {
+    "cod_llave": "c/n",
+    "cantidad": 2811,
+    "img": "llaves_img/MSI_MEG_GODLIKE.png",
+    "proveedor": 2,
+    "precio_compra": "0.90"
+  }
+},
+{
+  "model": "api.llaves",
+  "pk": 3,
+  "fields": {
+    "cod_llave": "ya-30",
+    "cantidad": 421,
+    "img": "llaves_img/MSI_MAG.jpg",
+    "proveedor": 2,
+    "precio_compra": "0.90"
+  }
+},
+{
+  "model": "api.llaves",
+  "pk": 4,
+  "fields": {
+    "cod_llave": "2003",
+    "cantidad": 300,
+    "img": "llaves_img/MSI.png",
+    "proveedor": 3,
+    "precio_compra": "0.90"
+  }
+},
+{
+  "model": "api.llaves",
+  "pk": 5,
+  "fields": {
+    "cod_llave": "sc7",
+    "cantidad": 300,
+    "img": "llaves_img/MSI_yUMNP3W.png",
+    "proveedor": 3,
+    "precio_compra": "0.90"
+  }
+},
+{
+  "model": "api.llaves",
+  "pk": 6,
+  "fields": {
+    "cod_llave": "ya-10",
+    "cantidad": 300,
+    "img": "llaves_img/MSI_PRO.jpg",
+    "proveedor": 2,
+    "precio_compra": "0.90"
+  }
+},
+{
+  "model": "api.llaves",
+  "pk": 7,
+  "fields": {
+    "cod_llave": "107",
+    "cantidad": 1930,
+    "img": "llaves_img/MSI_MPG.png",
+    "proveedor": 2,
+    "precio_compra": "0.90"
+  }
+},
+{
+  "model": "api.llaves",
+  "pk": 8,
+  "fields": {
+    "cod_llave": "108",
+    "cantidad": 4465,
+    "img": "llaves_img/MSI_PRO_IC1XIau.jpg",
+    "proveedor": 2,
+    "precio_compra": "0.90"
+  }
+},
+{
+  "model": "api.llaves",
+  "pk": 9,
+  "fields": {
+    "cod_llave": "cantol antiguo",
+    "cantidad": 300,
+    "img": "llaves_img/MSI_PRO_JDT7XxK.jpg",
+    "proveedor": 2,
+    "precio_compra": "0.90"
+  }
+},
+{
+  "model": "api.llaves",
+  "pk": 10,
+  "fields": {
+    "cod_llave": "fa1",
+    "cantidad": 301,
+    "img": "llaves_img/MSI_MPG_xUKcUez.png",
+    "proveedor": 2,
+    "precio_compra": "0.90"
+  }
+},
+{
+  "model": "api.llaves",
+  "pk": 11,
+  "fields": {
+    "cod_llave": "tr3",
+    "cantidad": 300,
+    "img": "llaves_img/MSI_MAG.jpg",
+    "proveedor": 2,
+    "precio_compra": "0.90"
+  }
+},
+{
+  "model": "api.llaves",
+  "pk": 12,
+  "fields": {
+    "cod_llave": "ya-6",
+    "cantidad": 2000,
+    "img": "llaves_img/Captura_de_pantalla_2026-01-22_210412.png",
+    "proveedor": 3,
+    "precio_compra": "0.90"
+  }
+},
+{
+  "model": "api.userprofile",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "min_stock_alert": 100,
+    "theme_color": "pink",
+    "preferred_provider": 2
+  }
+},
+{
+  "model": "api.userprofile",
+  "pk": 2,
+  "fields": {
+    "user": 3,
+    "min_stock_alert": 50,
+    "theme_color": "green",
+    "preferred_provider": 3
+  }
+},
+{
+  "model": "api.userprofile",
+  "pk": 3,
+  "fields": {
+    "user": 2,
+    "min_stock_alert": 300,
+    "theme_color": "indigo",
+    "preferred_provider": 3
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 1,
+  "fields": {
+    "llave": 2,
+    "user": 1,
+    "cantidad": 2,
+    "fecha": "2026-01-23T01:44:54.224Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 2,
+  "fields": {
+    "llave": 3,
+    "user": 1,
+    "cantidad": 10,
+    "fecha": "2026-01-23T01:44:54.225Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 3,
+  "fields": {
+    "llave": 5,
+    "user": 3,
+    "cantidad": 5,
+    "fecha": "2026-01-23T01:48:31.570Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 4,
+  "fields": {
+    "llave": 6,
+    "user": 3,
+    "cantidad": 10,
+    "fecha": "2026-01-23T01:48:31.571Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 5,
+  "fields": {
+    "llave": 7,
+    "user": 3,
+    "cantidad": 20,
+    "fecha": "2026-01-23T01:48:31.571Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 6,
+  "fields": {
+    "llave": 8,
+    "user": 3,
+    "cantidad": 10,
+    "fecha": "2026-01-23T01:48:31.572Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 7,
+  "fields": {
+    "llave": 1,
+    "user": 1,
+    "cantidad": 20,
+    "fecha": "2026-01-27T23:20:23.637Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 8,
+  "fields": {
+    "llave": 2,
+    "user": 1,
+    "cantidad": 10,
+    "fecha": "2026-01-27T23:20:23.638Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 9,
+  "fields": {
+    "llave": 3,
+    "user": 1,
+    "cantidad": 5,
+    "fecha": "2026-01-27T23:20:23.639Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 10,
+  "fields": {
+    "llave": 1,
+    "user": 1,
+    "cantidad": 5,
+    "fecha": "2026-01-27T23:30:46.204Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 11,
+  "fields": {
+    "llave": 2,
+    "user": 1,
+    "cantidad": 5,
+    "fecha": "2026-01-27T23:30:46.204Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 12,
+  "fields": {
+    "llave": 2,
+    "user": 1,
+    "cantidad": 20,
+    "fecha": "2026-01-27T23:53:01.897Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 13,
+  "fields": {
+    "llave": 3,
+    "user": 1,
+    "cantidad": 10,
+    "fecha": "2026-01-27T23:53:01.898Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 14,
+  "fields": {
+    "llave": 6,
+    "user": 1,
+    "cantidad": 5,
+    "fecha": "2026-01-27T23:53:01.898Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 15,
+  "fields": {
+    "llave": 7,
+    "user": 1,
+    "cantidad": 20,
+    "fecha": "2026-01-27T23:53:01.898Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 16,
+  "fields": {
+    "llave": 2,
+    "user": 1,
+    "cantidad": 20,
+    "fecha": "2026-01-28T15:53:51.549Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 17,
+  "fields": {
+    "llave": 3,
+    "user": 1,
+    "cantidad": 10,
+    "fecha": "2026-01-28T15:53:51.550Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 18,
+  "fields": {
+    "llave": 6,
+    "user": 1,
+    "cantidad": 20,
+    "fecha": "2026-01-28T15:53:51.550Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 19,
+  "fields": {
+    "llave": 2,
+    "user": 1,
+    "cantidad": 20,
+    "fecha": "2026-01-28T16:02:30.335Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 20,
+  "fields": {
+    "llave": 10,
+    "user": 1,
+    "cantidad": 5,
+    "fecha": "2026-01-28T16:02:30.336Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 21,
+  "fields": {
+    "llave": 11,
+    "user": 1,
+    "cantidad": 10,
+    "fecha": "2026-01-28T16:02:30.336Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 22,
+  "fields": {
+    "llave": 2,
+    "user": 1,
+    "cantidad": 20,
+    "fecha": "2026-01-28T17:13:13.226Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 23,
+  "fields": {
+    "llave": 3,
+    "user": 1,
+    "cantidad": 5,
+    "fecha": "2026-01-28T17:13:13.227Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 24,
+  "fields": {
+    "llave": 2,
+    "user": 1,
+    "cantidad": 20,
+    "fecha": "2026-01-28T17:31:40.397Z"
+  }
+},
+{
+  "model": "api.historialsalida",
+  "pk": 25,
+  "fields": {
+    "llave": 3,
+    "user": 1,
+    "cantidad": 5,
+    "fecha": "2026-01-28T17:31:40.398Z"
+  }
+},
+{
+  "model": "api.historialcompra",
+  "pk": 1,
+  "fields": {
+    "llave": 8,
+    "proveedor": 2,
+    "cantidad": 2000,
+    "precio_pago": null,
+    "fecha": "2026-01-28T17:37:25.597Z"
+  }
+},
+{
+  "model": "api.historialcompra",
+  "pk": 2,
+  "fields": {
+    "llave": 10,
+    "proveedor": 2,
+    "cantidad": 1,
+    "precio_pago": null,
+    "fecha": "2026-01-28T17:37:25.598Z"
+  }
+}
+]
