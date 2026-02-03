@@ -65,18 +65,38 @@ const autoFill = async (silent = false) => {
         // Obtenemos llaves filtradas por el proveedor actual si existe
         const { data } = await llaveService.getLlaves(props.preferredProvider);
         let count = 0;
+
+        // Primero: actualizar stock_actual de items ya en la lista y eliminar los que ya no necesiten reabastecimiento
+        let cleaned = 0;
+        (Array.isArray(shoppingStore.items) ? [...shoppingStore.items] : []).forEach(existingItem => {
+            const match = data.find((l: any) => l.id === existingItem.id);
+            if (match) {
+                // Actualizamos stock_actual
+                existingItem.stock_actual = Number(match.cantidad) || 0;
+                // Si ahora tiene suficiente stock, quitarlo de la lista
+                if (existingItem.stock_actual >= minAlert.value) {
+                    shoppingStore.removeItem(existingItem.id);
+                    cleaned++;
+                }
+            }
+        });
+
+        // Ahora agregar los que faltan
         data.forEach((llave: any) => {
-            if (llave.cantidad < minAlert.value) {
+            if (Number(llave.cantidad) < Number(minAlert.value)) {
                 // Pass minAlert.value as targetStock to ensure it uses the user-defined threshold
-                shoppingStore.addItem(llave, 0, minAlert.value); 
+                shoppingStore.addItem(llave, 0, Number(minAlert.value)); 
                 count++;
             }
         });
         
         if (!silent) {
+            if (cleaned > 0) {
+                toast.info(`${cleaned} item(s) removidos porque ya tienen stock suficiente.`);
+            }
             if (count > 0) {
                 toast.success(`${count} llaves con stock bajo agregadas a la lista.`);
-            } else {
+            } else if (cleaned === 0) {
                 toast.info('No se encontraron llaves con stock bajo para este criterio.');
             }
         }
@@ -143,22 +163,49 @@ onMounted(async () => {
     }
 });
 
-const receiveOrder = async (providerName: string) => {
-    if (!confirm(`¿Confirmar recepción de pedido para ${providerName}? Esto aumentará el stock.`)) return;
-    
-    const itemsToProcess = groupedItems.value[providerName] || [];
-    const payload = itemsToProcess.map(i => ({ id: i.id, cantidad: i.cantidad }));
-    
+// Estado y funciones para modal de recepción
+const selectedReceiveProvider = ref<string | null>(null);
+const showReceiveModal = ref(false);
+const isReceiving = ref(false);
+const receiveResult = ref<{ success: boolean; message: string } | null>(null);
+const showReceiveResultModal = ref(false);
+
+const openReceiveModal = (providerName: string) => {
+    selectedReceiveProvider.value = providerName;
+    showReceiveModal.value = true;
+};
+
+const cancelReceive = () => {
+    showReceiveModal.value = false;
+    selectedReceiveProvider.value = null;
+};
+
+const confirmReceive = async () => {
+    showReceiveModal.value = false;
+    isReceiving.value = true;
+
     try {
+        const itemsToProcess = groupedItems.value[selectedReceiveProvider.value as string] || [];
+        const payload = itemsToProcess.map(i => ({ id: i.id, cantidad: i.cantidad }));
         await llaveService.bulkIncrement(payload);
-        toast.success(`Stock actualizado para ${providerName}`);
-        
+        toast.success(`Stock actualizado para ${selectedReceiveProvider.value}`);
         // Remove processed items
         itemsToProcess.forEach(i => shoppingStore.removeItem(i.id));
+        receiveResult.value = { success: true, message: 'Stock actualizado correctamente.' };
     } catch (e) {
         console.error(e);
         toast.error('Error al recibir el pedido');
+        receiveResult.value = { success: false, message: 'Hubo un error al procesar la recepción.' };
+    } finally {
+        isReceiving.value = false;
+        showReceiveResultModal.value = true;
+        selectedReceiveProvider.value = null;
     }
+};
+
+const closeReceiveResult = () => {
+    showReceiveResultModal.value = false;
+    receiveResult.value = null;
 };
 
 
@@ -260,7 +307,7 @@ const printProviderOrder = (providerName: string) => {
                             Imprimir
                         </button>
 
-                        <button @click="receiveOrder(String(providerName))" class="flex-1 md:flex-none h-12 px-8 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-black text-[10px] uppercase tracking-widest text-white shadow-lg shadow-emerald-600/20 active:scale-95 transition-all flex items-center justify-center">
+                        <button @click="openReceiveModal(String(providerName))" class="flex-1 md:flex-none h-12 px-8 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-black text-[10px] uppercase tracking-widest text-white shadow-lg shadow-emerald-600/20 active:scale-95 transition-all flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                             </svg>
@@ -347,6 +394,92 @@ const printProviderOrder = (providerName: string) => {
                 </div>
             </div>
         </div>
+
+        <!-- Modal Confirmación de Recepción -->
+        <Transition name="fade">
+            <div v-if="showReceiveModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-sm">
+                <div class="bg-slate-900 rounded-3xl p-6 max-w-lg w-full border border-white/10 shadow-2xl animate-in zoom-in-95 duration-200">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-black text-white">Confirmar Recepción</h3>
+                        <button @click="cancelReceive" class="w-10 h-10 rounded-xl hover:bg-white/10 flex items-center justify-center transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-400 hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="text-slate-300 text-sm mb-4">Se actualizará el stock para <span class="font-black text-emerald-300">{{ selectedReceiveProvider }}</span>. Esta acción es permanente y ajustará el inventario según las cantidades en la lista.</p>
+
+                    <div class="max-h-40 overflow-y-auto space-y-2 mb-4 bg-slate-900/50 rounded-xl p-3">
+                        <div v-for="item in groupedItems[selectedReceiveProvider]" :key="item.id" class="flex justify-between items-center text-sm p-2 bg-slate-800/40 rounded-lg">
+                            <span class="font-bold text-white">{{ item.cod_llave }}</span>
+                            <span class="text-slate-400">{{ item.cantidad }} un.</span>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 justify-end">
+                        <button @click="cancelReceive" class="px-4 py-2 rounded-xl bg-slate-800 text-sm font-bold text-slate-400 hover:text-white hover:bg-slate-700">Cancelar</button>
+                        <button @click="confirmReceive" :disabled="isReceiving" class="px-4 py-2 rounded-xl bg-emerald-600 text-sm font-bold text-white hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                            <svg v-if="isReceiving" class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                            </svg>
+                            {{ isReceiving ? 'Procesando...' : 'Confirmar Recepción' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </Transition>
+
+        <!-- Modal Resultado Recepción -->
+        <Transition name="fade">
+            <div v-if="showReceiveResultModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60">
+                <div :class="[
+                    'rounded-3xl border shadow-2xl max-w-md w-full animate-in zoom-in-95 duration-200 bg-gradient-to-br',
+                    receiveResult?.success 
+                        ? 'from-slate-800 to-slate-900 border-emerald-500/20' 
+                        : 'from-slate-800 to-slate-900 border-red-500/20'
+                ]">
+                    <div :class="[
+                        'p-6 border-b flex items-center gap-3',
+                        receiveResult?.success 
+                            ? 'border-emerald-500/20 bg-gradient-to-r from-emerald-600/10 to-green-600/10' 
+                            : 'border-red-500/20 bg-gradient-to-r from-red-600/10 to-orange-600/10'
+                    ]">
+                        <div :class="[
+                            'w-12 h-12 rounded-xl border flex items-center justify-center',
+                            receiveResult?.success 
+                                ? 'bg-emerald-600/20 border-emerald-500/30' 
+                                : 'bg-red-600/20 border-red-500/30'
+                        ]">
+                            <svg v-if="receiveResult?.success" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4v2m0 4v2M8.228 9c-.549-1.165-2.03-2-3.772-2C2.343 7 1 8.343 1 10c0 1.4 1.278 2.575 3.006 2.907.542.104.994.54.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 :class="['text-xl font-black', receiveResult?.success ? 'text-emerald-400' : 'text-red-400']">
+                                {{ receiveResult?.success ? '¡Éxito!' : 'Error' }}
+                            </h3>
+                            <p class="text-xs text-slate-400 mt-1">{{ receiveResult?.message }}</p>
+                        </div>
+                    </div>
+
+                    <div class="p-6">
+                        <p class="text-sm text-slate-300 text-center">
+                            {{ receiveResult?.success ? 'El inventario ha sido actualizado exitosamente.' : 'Por favor, intenta nuevamente o contacta con soporte.' }}
+                        </p>
+                    </div>
+
+                    <div class="p-6 border-t border-white/10 bg-slate-900/50 rounded-b-3xl">
+                        <button @click="closeReceiveResult" class="w-full px-4 py-3 rounded-xl font-bold text-sm uppercase tracking-widest bg-indigo-600 text-white hover:shadow-lg transition-all active:scale-95">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </Transition>
 
         <!-- Manual Add Modal -->
         <Transition name="fade">
