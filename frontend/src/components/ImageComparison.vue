@@ -21,6 +21,15 @@ const fileInput = ref<HTMLInputElement | null>(null);
 const HIGH_MATCH_THRESHOLD = 0.8;
 const showHighMatchesOnly = ref(true);
 
+// Tipos disponibles (coincide con backend)
+const tipoOptions = [
+    { value: 'all', label: 'Todos' },
+    { value: 'house', label: 'Casa' },
+    { value: 'car', label: 'Auto' },
+    { value: 'menga', label: 'Menga Canal' }
+];
+const selectedTipo = ref('all');
+
 const filteredResults = computed(() => {
     if (!comparisonResults.value?.results) return [];
     return comparisonResults.value.results.filter((r: any) => {
@@ -109,6 +118,11 @@ const compareImages = async () => {
         formData.append('uploaded_image', uploadedImage.value);
         formData.append('threshold', threshold.value.toString());
         
+        // Enviar tipo si se seleccionó uno específico
+        if (selectedTipo.value && selectedTipo.value !== 'all') {
+            formData.append('tipo', selectedTipo.value);
+        }
+
         const { data } = await api.post('/images/compare/', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -132,7 +146,9 @@ const compareImages = async () => {
         if (data.error) {
             showToast(data.error, 'info');
         } else if (data.matches > 0) {
-            showToast(`¡Se encontraron ${data.matches} coincidencias!`, 'success');
+            // Añadir contexto si se aplicó un filtro de tipo
+            const tipoLabel = data.filtered_tipo ? (tipoOptions.find(o => o.value === data.filtered_tipo)?.label || data.filtered_tipo) : null;
+            showToast(`¡Se encontraron ${data.matches} coincidencias!${tipoLabel ? ' (Tipo: ' + tipoLabel + ')' : ''}`, 'success');
         } else {
             showToast('No se encontraron coincidencias', 'info');
         }
@@ -200,7 +216,13 @@ onMounted(() => {
         <div class="flex-1">
           <h3 class="text-cyan-300 font-bold text-lg">Comparador de Imágenes</h3>
           <p class="text-slate-400 text-sm mt-1">Carga una imagen de una llave para encontrar coincidencias exactas en tu base de datos. El sistema analizará características visuales y color, mostrando las llaves similares con sus imágenes.</p>
-        </div>
+          <div class="mt-3 flex items-center gap-3">
+            <label class="text-xs font-black text-slate-400 uppercase tracking-widest">Filtrar por tipo</label>
+            <select v-model="selectedTipo" class="h-9 bg-slate-900/50 border border-white/5 rounded-lg px-3 text-white text-sm">
+              <option v-for="opt in tipoOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
+            </select>
+            <p v-if="selectedTipo !== 'all'" class="text-[11px] text-slate-400 ml-3">Mostrando solo <span class="font-bold text-white">{{ tipoOptions.find(o => o.value === selectedTipo)?.label }}</span></p>
+          </div>        </div>
       </div>
     </div>
 

@@ -194,9 +194,14 @@ class ImageComparisonView(APIView):
             # Leer bytes de la imagen
             uploaded_image_bytes = uploaded_file.read()
             
-            # Obtener todas las llaves con imágenes
+            # Obtener filtro de tipo (opcional)
+            tipo = request.data.get('tipo')
+
+            # Obtener todas las llaves con imágenes y filtrar por tipo si se proporcionó
             llaves = Llaves.objects.filter(img__isnull=False).exclude(img='')
-            
+            if tipo and tipo != 'all':
+                llaves = llaves.filter(tipo=tipo)
+
             # Preparar lista de imágenes de la BD
             database_images = []
             for llave in llaves:
@@ -216,8 +221,9 @@ class ImageComparisonView(APIView):
                     continue
             
             if not database_images:
+                tipo_msg = f" para el tipo '{tipo}'" if tipo and tipo != 'all' else ''
                 return Response({
-                    'error': 'No hay imágenes de llaves disponibles en la base de datos',
+                    'error': f'No hay imágenes de llaves disponibles en la base de datos{tipo_msg}',
                     'results': [],
                     'total': 0,
                     'matches': 0
@@ -225,6 +231,8 @@ class ImageComparisonView(APIView):
             
             # Comparar imágenes
             comparison_result = compare_with_database(uploaded_image_bytes, database_images, threshold)
+            # Incluir info del filtro aplicado para que el frontend pueda mostrarlo si quiere
+            comparison_result['filtered_tipo'] = tipo if tipo and tipo != 'all' else None
             
             return Response(comparison_result, status=200)
         
