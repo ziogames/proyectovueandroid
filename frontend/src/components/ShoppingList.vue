@@ -397,33 +397,36 @@ const printProviderOrder = (providerName: string) => {
 
         <!-- Modal Confirmación de Recepción -->
         <Transition name="fade">
-            <div v-if="showReceiveModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-sm">
-                <div class="bg-slate-900 rounded-3xl p-6 max-w-lg w-full border border-white/10 shadow-2xl animate-in zoom-in-95 duration-200">
+            <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-md">
+                <div class="bg-gradient-to-br from-slate-900/95 to-slate-900/80 rounded-3xl p-6 max-w-lg w-full border border-white/6 shadow-2xl animate-in zoom-in-95 duration-300 ease-out">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-xl font-black text-white">Confirmar Recepción</h3>
-                        <button @click="cancelReceive" class="w-10 h-10 rounded-xl hover:bg-white/10 flex items-center justify-center transition-all">
+                        <h3 class="text-2xl font-extrabold text-white tracking-tight">Confirmar recepción del pedido</h3>
+                        <button aria-label="Cerrar modal" @click="cancelReceive" class="w-10 h-10 rounded-xl hover:bg-white/6 flex items-center justify-center transition-all">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-400 hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
                     </div>
-                    <p class="text-slate-300 text-sm mb-4">Se actualizará el stock para <span class="font-black text-emerald-300">{{ selectedReceiveProvider }}</span>. Esta acción es permanente y ajustará el inventario según las cantidades en la lista.</p>
+                    <p class="text-slate-300 text-sm mb-4">Vas a actualizar el inventario del proveedor <span class="font-bold text-emerald-300">{{ selectedReceiveProvider }}</span>. Esta acción ajustará las cantidades de la lista y <span class="font-bold text-slate-200">no podrá revertirse</span>. ¿Deseas continuar?</p>
 
-                    <div class="max-h-40 overflow-y-auto space-y-2 mb-4 bg-slate-900/50 rounded-xl p-3">
-                        <div v-for="item in groupedItems[selectedReceiveProvider]" :key="item.id" class="flex justify-between items-center text-sm p-2 bg-slate-800/40 rounded-lg">
-                            <span class="font-bold text-white">{{ item.cod_llave }}</span>
-                            <span class="text-slate-400">{{ item.cantidad }} un.</span>
+                    <div class="max-h-40 overflow-y-auto space-y-3 mb-4 bg-slate-900/50 rounded-xl p-3">
+                        <div v-for="item in groupedItems[selectedReceiveProvider]" :key="item.id" class="flex justify-between items-center text-sm p-3 bg-slate-800/30 rounded-lg">
+                            <div>
+                                <p class="font-bold text-slate-100">{{ item.cod_llave }}</p>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Referencia</p>
+                            </div>
+                            <span class="text-slate-200 bg-slate-800/60 px-3 py-1 rounded-full font-bold text-sm">{{ item.cantidad }} ud.</span>
                         </div>
                     </div>
 
                     <div class="flex gap-3 justify-end">
-                        <button @click="cancelReceive" class="px-4 py-2 rounded-xl bg-slate-800 text-sm font-bold text-slate-400 hover:text-white hover:bg-slate-700">Cancelar</button>
-                        <button @click="confirmReceive" :disabled="isReceiving" class="px-4 py-2 rounded-xl bg-emerald-600 text-sm font-bold text-white hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
-                            <svg v-if="isReceiving" class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <button @click="cancelReceive" class="px-4 py-2 rounded-xl bg-transparent border border-white/6 text-sm font-bold text-slate-300 hover:bg-white/5 hover:text-white transition-transform hover:scale-[1.02]">Cancelar</button>
+                        <button @click="confirmReceive" :disabled="isReceiving" class="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-green-500 text-sm font-extrabold text-white shadow-lg hover:shadow-emerald-500/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 transform transition-all duration-300 hover:-translate-y-0.5 active:scale-95">
+                            <svg v-if="isReceiving" class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                             </svg>
-                            {{ isReceiving ? 'Procesando...' : 'Confirmar Recepción' }}
+                            {{ isReceiving ? 'Procesando...' : 'Confirmar y actualizar' }}
                         </button>
                     </div>
                 </div>
@@ -459,22 +462,22 @@ const printProviderOrder = (providerName: string) => {
                             </svg>
                         </div>
                         <div>
-                            <h3 :class="['text-xl font-black', receiveResult?.success ? 'text-emerald-400' : 'text-red-400']">
-                                {{ receiveResult?.success ? '¡Éxito!' : 'Error' }}
+                            <h3 :class="['text-2xl font-extrabold', receiveResult?.success ? 'text-emerald-300' : 'text-red-300']">
+                                {{ receiveResult?.success ? 'Inventario actualizado' : 'Actualización fallida' }}
                             </h3>
-                            <p class="text-xs text-slate-400 mt-1">{{ receiveResult?.message }}</p>
+                            <p class="text-sm text-slate-300 mt-1">{{ receiveResult?.message }}</p>
                         </div>
                     </div>
 
                     <div class="p-6">
                         <p class="text-sm text-slate-300 text-center">
-                            {{ receiveResult?.success ? 'El inventario ha sido actualizado exitosamente.' : 'Por favor, intenta nuevamente o contacta con soporte.' }}
+                            {{ receiveResult?.success ? 'Los cambios fueron registrados. Revisa el inventario para verificar las cantidades.' : 'Ocurrió un error al actualizar. Verifica la conexión e intenta nuevamente. Si el problema persiste, contacta con soporte.' }}
                         </p>
                     </div>
 
                     <div class="p-6 border-t border-white/10 bg-slate-900/50 rounded-b-3xl">
-                        <button @click="closeReceiveResult" class="w-full px-4 py-3 rounded-xl font-bold text-sm uppercase tracking-widest bg-indigo-600 text-white hover:shadow-lg transition-all active:scale-95">
-                            Cerrar
+                        <button @click="closeReceiveResult" :class="['w-full px-4 py-3 rounded-xl font-bold text-sm uppercase tracking-widest text-white hover:shadow-lg transition-all active:scale-95', receiveResult?.success ? 'bg-emerald-600' : 'bg-red-600']">
+                            {{ receiveResult?.success ? 'Entendido' : 'Cerrar' }}
                         </button>
                     </div>
                 </div>
