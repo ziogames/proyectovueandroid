@@ -42,8 +42,11 @@ class LlavesViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Llaves.objects.all()
         proveedor_id = self.request.query_params.get('proveedor')
+        tipo = self.request.query_params.get('tipo')
         if proveedor_id:
             queryset = queryset.filter(proveedor_id=proveedor_id)
+        if tipo and tipo != '':
+            queryset = queryset.filter(tipo=tipo)
         return queryset
 
     @action(detail=False, methods=['post'])

@@ -1,4 +1,5 @@
 from django.db import models
+from decimal import Decimal
 
 class Proveedor(models.Model):
     nombre = models.CharField(max_length=255)
@@ -10,11 +11,18 @@ class Proveedor(models.Model):
         return self.nombre
 
 class Llaves(models.Model):
+    TIPO_CHOICES = [
+        ('house', 'Casa'),
+        ('car', 'Auto'),
+        ('menga', 'Menga Canal')
+    ]
+
     cod_llave = models.CharField(max_length=50)
     cantidad = models.IntegerField()
     img = models.ImageField(upload_to='llaves_img/', null=True, blank=True)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, related_name='llaves')
-    precio_compra = models.DecimalField(max_digits=10, decimal_places=2, default=0.90)
+    precio_compra = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.90'))
+    tipo = models.CharField(max_length=10, choices=TIPO_CHOICES, default='house', db_index=True)
 
     def __str__(self):
         return self.cod_llave

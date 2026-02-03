@@ -12,23 +12,21 @@ const props = defineProps<{
 const toast = useToast();
 const llaves = ref<Llave[]>([]);
 const proveedores = ref<Proveedor[]>([]);
+const selectedTipo = ref<string>('house');
+const tipoMap: Record<string,string> = { house: 'Casa', car: 'Auto', menga: 'Menga Canal' };
 const form = ref({
     cod_llave: '',
     cantidad: 0,
     proveedor: props.preferredProvider || '' as string | number,
-    img: null as File | null
+    img: null as File | null,
+    tipo: 'house'
 });
 
-import { watch } from 'vue';
-watch(() => props.preferredProvider, (newVal) => {
-    form.value.proveedor = newVal || '';
-    loadData();
-});
-
+// Update loadData usage (ensure we pass tipo)
 const loadData = async () => {
     try {
         const [llavesRes, provRes] = await Promise.all([
-            llaveService.getLlaves(props.preferredProvider),
+            llaveService.getLlaves(props.preferredProvider, selectedTipo.value),
             proveedorService.getProveedores()
         ]);
         llaves.value = llavesRes.data;
@@ -38,19 +36,14 @@ const loadData = async () => {
     }
 };
 
-const handleFileUpload = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    if (target.files && target.files[0]) {
-        form.value.img = target.files[0];
-    }
-};
-
+// Update submitForm to include tipo
 const submitForm = async () => {
     try {
         const formData = new FormData();
         formData.append('cod_llave', form.value.cod_llave);
         formData.append('cantidad', form.value.cantidad.toString());
         formData.append('proveedor', form.value.proveedor.toString());
+        formData.append('tipo', form.value.tipo);
         if (form.value.img) {
             formData.append('img', form.value.img);
         }
@@ -60,7 +53,7 @@ const submitForm = async () => {
         toast.success(`Llave ${form.value.cod_llave} creada exitosamente`);
         
         // Reset
-        form.value = { cod_llave: '', cantidad: 0, proveedor: props.preferredProvider || '', img: null };
+        form.value = { cod_llave: '', cantidad: 0, proveedor: props.preferredProvider || '', img: null, tipo: selectedTipo.value || 'house' };
         const fileInput = document.getElementById('file-upload') as HTMLInputElement;
         if(fileInput) fileInput.value = '';
         
@@ -79,6 +72,29 @@ const submitForm = async () => {
         }
     }
 };
+
+import { watch } from 'vue';
+watch(() => props.preferredProvider, (newVal) => {
+    form.value.proveedor = newVal || '';
+    loadData();
+});
+
+watch(selectedTipo, () => {
+    // Reload when type tab changes
+    form.value.tipo = selectedTipo.value;
+    loadData();
+});
+
+const handleFileUpload = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files[0]) {
+        form.value.img = target.files[0];
+    }
+};
+
+onMounted(() => {
+    loadData();
+});
 
 const getProveedorName = (id: number) => {
     const prov = proveedores.value.find(p => p.id === id);
@@ -104,7 +120,7 @@ onMounted(() => {
         <div class="absolute top-0 right-0 w-32 h-32 bg-violet-600/10 rounded-full blur-3xl group-hover:bg-violet-600/20 transition-all duration-700"></div>
         
         <div class="relative">
-            <h3 class="text-2xl font-black text-white mb-8 flex items-center tracking-tight">
+            <h3 class="text-2xl font-black text-white mb-4 flex items-center tracking-tight">
                 <div class="p-3 bg-violet-600/20 rounded-2xl mr-4 border border-violet-500/20">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-violet-400" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
@@ -112,6 +128,13 @@ onMounted(() => {
                 </div>
                 Nueva Entrada de Inventario
             </h3>
+
+            <!-- Tipo tabs -->
+            <div class="flex items-center gap-3 mb-6">
+                <button v-for="(label, key) in tipoMap" :key="key" @click="selectedTipo = key" :class="['px-4 py-2 rounded-full text-sm font-black transition-all', selectedTipo === key ? 'bg-violet-600 text-white' : 'bg-white/5 text-slate-300 hover:bg-white/8']">
+                    {{ label }}
+                </button>
+            </div>
 
             <form @submit.prevent="submitForm" class="grid grid-cols-1 md:grid-cols-4 gap-8 items-end">
                 <div class="md:col-span-1 space-y-2">
@@ -134,6 +157,15 @@ onMounted(() => {
                             Requiere config. previa
                         </span>
                     </div>
+                </div>
+
+                <div class="md:col-span-1 space-y-2">
+                    <label class="block text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Tipo de Llave</label>
+                    <select v-model="form.tipo" class="w-full h-16 bg-slate-900/50 border border-white/5 rounded-2xl px-4 text-white font-bold focus:outline-none focus:ring-2 focus:ring-violet-500/50 transition-all">
+                        <option value="house">Casa</option>
+                        <option value="car">Auto</option>
+                        <option value="menga">Menga Canal</option>
+                    </select>
                 </div>
 
                 <div class="md:col-span-1 space-y-2">
@@ -195,7 +227,7 @@ onMounted(() => {
             <div class="p-6 flex flex-col flex-1 relative">
                 <div class="flex-1">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-[10px] font-black text-violet-400 uppercase tracking-widest">Master Key</span>
+                        <span class="text-[10px] font-black text-violet-400 uppercase tracking-widest">{{ tipoMap[llave.tipo || 'house'] || 'Casa' }}</span>
                         <div v-if="llave.cantidad < 5" class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></div>
                     </div>
                     <h4 class="text-2xl font-black text-white mb-2 tracking-tight group-hover:text-violet-300 transition-colors">{{ llave.cod_llave }}</h4>
@@ -234,7 +266,7 @@ onMounted(() => {
             </svg>
         </div>
         <h3 class="text-2xl font-black text-white mb-2">Inventario Vacío</h3>
-        <p class="text-slate-500 font-bold">No se encontraron llaves asociadas a este proveedor.</p>
+        <p class="text-slate-500 font-bold">No se encontraron llaves de <span class="font-black">{{ tipoMap[selectedTipo] }}</span> para este proveedor.</p>
     </div>
   </div>
 

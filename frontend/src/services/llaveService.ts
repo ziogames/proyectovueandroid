@@ -8,11 +8,17 @@ export interface Llave {
     proveedor: number; // ID del proveedor
     proveedor_nombre?: string;
     precio_compra: number | string;
+    tipo?: string;
+    tipo_display?: string;
 }
 
 export default {
-    getLlaves(providerId?: number | string | null) {
-        const url = providerId ? `llaves/?proveedor=${providerId}` : 'llaves/';
+    getLlaves(providerId?: number | string | null, tipo?: string | null) {
+        const params: string[] = [];
+        if (providerId) params.push(`proveedor=${providerId}`);
+        if (tipo) params.push(`tipo=${encodeURIComponent(tipo)}`);
+        const query = params.length ? `?${params.join('&')}` : '';
+        const url = `llaves/${query}`;
         return api.get<Llave[]>(url);
     },
     createLlave(data: FormData) {

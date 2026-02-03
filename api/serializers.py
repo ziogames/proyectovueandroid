@@ -21,6 +21,7 @@ class ProveedorSerializer(serializers.ModelSerializer):
 
 class LlavesSerializer(serializers.ModelSerializer):
     proveedor_nombre = serializers.SerializerMethodField()
+    tipo_display = serializers.CharField(source='get_tipo_display', read_only=True)
 
     class Meta:
         model = Llaves
