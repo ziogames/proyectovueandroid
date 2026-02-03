@@ -65,7 +65,7 @@ const sendMessage = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col h-full glass-card rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl animate-in slide-in-from-right-8 duration-700">
+  <div class="flex flex-col h-full glass-card card-animate rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl animate-in slide-in-from-right-8 duration-700">
     <!-- Header Chat -->
     <div class="p-6 md:p-8 bg-white/[0.02] border-b border-white/5 flex items-center justify-between">
         <div class="flex items-center">

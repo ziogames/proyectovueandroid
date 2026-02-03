@@ -79,3 +79,55 @@ h1, h2, h3, h4 {
   opacity: 0;
   transform: translateY(-10px);
 }
+
+/* Theme extensions */
+:root {
+  --accent-success: #10b981; /* emerald */
+  --accent-warn: #f97316; /* amber/orange */
+  --accent-error: #ef4444; /* red */
+}
+
+/* Make glass-card respond smoothly by default */
+.glass-card {
+  transition: transform 0.35s cubic-bezier(.2,.9,.2,1), box-shadow 0.35s ease, opacity 0.3s ease;
+  will-change: transform, box-shadow;
+}
+
+/* Card animation utility */
+.card-animate {
+  transition: transform 0.45s cubic-bezier(.2,.9,.2,1), box-shadow 0.45s ease, opacity 0.35s ease;
+  will-change: transform;
+}
+
+.card-animate:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 20px 40px rgba(2,6,23,0.55), 0 6px 14px rgba(0,0,0,0.28);
+}
+
+@keyframes card-floating {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+
+/* Optional subtle continuous float */
+.animate-float {
+  animation: card-floating 6s ease-in-out infinite;
+}
+
+/* Modal zoom utility used for smoother modals */
+.modal-zoom {
+  animation: zoomIn 0.28s cubic-bezier(.2,.9,.2,1) both;
+}
+
+@keyframes zoomIn {
+  from { transform: scale(.96); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Small utility for emphasized CTA buttons */
+.btn-cta {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn-cta:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.25); }

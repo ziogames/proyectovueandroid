@@ -44,7 +44,7 @@ const formatDate = (dateStr: string) => {
     <div class="space-y-12 animate-in fade-in transition-all duration-700">
         <!-- summary Stats -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 no-print">
-            <div class="glass-card rounded-3xl p-8 flex items-center bg-gradient-to-br from-emerald-600/10 to-teal-600/10 border border-emerald-500/20">
+            <div class="glass-card card-animate rounded-3xl p-8 flex items-center bg-gradient-to-br from-emerald-600/10 to-teal-600/10 border border-emerald-500/20 animate-float">
                 <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 flex items-center justify-center mr-6">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -56,7 +56,7 @@ const formatDate = (dateStr: string) => {
                 </div>
             </div>
 
-            <div class="glass-card rounded-3xl p-8 flex items-center bg-gradient-to-br from-indigo-600/10 to-violet-600/10 border border-indigo-500/20">
+            <div class="glass-card card-animate rounded-3xl p-8 flex items-center bg-gradient-to-br from-indigo-600/10 to-violet-600/10 border border-indigo-500/20 animate-float">
                 <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 flex items-center justify-center mr-6">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
@@ -102,7 +102,7 @@ const formatDate = (dateStr: string) => {
         </div>
 
         <!-- Table Container -->
-        <div class="glass-card rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl relative">
+        <div class="glass-card card-animate rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl relative">
             <div v-if="loading" class="absolute inset-0 bg-slate-950/40 backdrop-blur-sm z-10 flex items-center justify-center">
                 <div class="flex flex-col items-center">
                     <div class="w-12 h-12 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin mb-4"></div>
@@ -162,7 +162,7 @@ const formatDate = (dateStr: string) => {
 
             <!-- Empty State -->
             <div v-if="purchases.length === 0 && !loading" class="p-24 text-center">
-                <div class="w-24 h-24 rounded-3xl bg-slate-900 border border-white/5 flex items-center justify-center mb-8 mx-auto shadow-inner">
+                <div class="w-24 h-24 rounded-3xl bg-slate-900 border border-white/5 flex items-center justify-center mb-8 mx-auto shadow-inner card-animate">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0a2 2 0 01-2 2H6a2 2 0 01-2-2m16 0l-8 5-8-5" />
                     </svg>

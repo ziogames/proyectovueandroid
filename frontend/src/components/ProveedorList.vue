@@ -129,7 +129,7 @@ const generateOrderForProvider = async (proveedor: Proveedor) => {
 <template>
   <div class="space-y-12 animate-in fade-in transition-all duration-700">
     <!-- Form Card -->
-    <div v-if="isAdmin" class="glass-card rounded-[2.5rem] p-8 lg:p-10 relative overflow-hidden group">
+    <div v-if="isAdmin" class="glass-card card-animate rounded-[2.5rem] p-8 lg:p-10 relative overflow-hidden group">
         <!-- Decoration -->
         <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-600/10 rounded-full blur-3xl group-hover:bg-indigo-600/20 transition-all duration-700"></div>
         
@@ -194,7 +194,7 @@ const generateOrderForProvider = async (proveedor: Proveedor) => {
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
         <div v-for="prov in proveedores" :key="prov.id" 
             :class="[
-                'glass-card rounded-[2.5rem] p-8 flex flex-col group transition-all duration-500 hover:translate-y-[-4px] border',
+                'glass-card card-animate rounded-[2.5rem] p-8 flex flex-col group transition-all duration-500 hover:translate-y-[-4px] border',
                 getHighlightClass(prov.id),
                 prov.id == props.preferredProvider ? 'ring-2' : 'hover:ring-2 hover:ring-white/10'
             ]"
@@ -246,7 +246,7 @@ const generateOrderForProvider = async (proveedor: Proveedor) => {
     </div>
 
     <!-- Empty State -->
-    <div v-if="proveedores.length === 0" class="glass-card rounded-[2.5rem] p-20 text-center flex flex-col items-center justify-center">
+    <div v-if="proveedores.length === 0" class="glass-card card-animate rounded-[2.5rem] p-20 text-center flex flex-col items-center justify-center">
         <div class="w-24 h-24 rounded-3xl bg-slate-900 border border-white/5 flex items-center justify-center mb-6">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0z" />

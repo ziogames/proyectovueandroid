@@ -79,7 +79,7 @@ const closeResultModal = () => {
 
 <template>
   <div class="max-w-4xl mx-auto space-y-10 animate-in fade-in transition-all duration-700">
-    <div class="glass-card rounded-[2.5rem] p-10 relative overflow-hidden group">
+    <div class="glass-card card-animate rounded-[2.5rem] p-10 relative overflow-hidden group">
         <!-- Decoration -->
         <div class="absolute top-0 right-0 w-32 h-32 bg-rose-600/10 rounded-full blur-3xl group-hover:bg-rose-600/20 transition-all duration-700"></div>
 
@@ -108,7 +108,7 @@ const closeResultModal = () => {
             <!-- Items List -->
             <div v-else class="space-y-4">
                 <div v-for="item in items" :key="item.id" 
-                    class="glass-card rounded-[2rem] p-6 flex flex-col sm:flex-row items-center justify-between gap-6 border border-white/5 hover:bg-white/[0.04] transition-all group/item"
+                    class="glass-card card-animate rounded-[2rem] p-6 flex flex-col sm:flex-row items-center justify-between gap-6 border border-white/5 hover:bg-white/[0.04] transition-all group/item"
                 >
                     <div class="flex items-center space-x-6">
                         <div class="h-14 w-14 rounded-2xl bg-slate-900 flex items-center justify-center border border-white/5 shadow-inner">

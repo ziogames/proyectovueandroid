@@ -71,7 +71,7 @@ onMounted(() => {
 <template>
   <div class="space-y-10 animate-in fade-in transition-all duration-700">
     <!-- Filters Area -->
-    <div class="glass-card rounded-[2.5rem] p-8 lg:p-10 relative overflow-hidden group">
+    <div class="glass-card card-animate rounded-[2.5rem] p-8 lg:p-10 relative overflow-hidden group">
         <!-- Decoration -->
         <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-600/10 rounded-full blur-3xl group-hover:bg-cyan-600/20 transition-all duration-700"></div>
 
@@ -130,7 +130,7 @@ onMounted(() => {
     </div>
 
     <!-- History Table Container -->
-    <div class="glass-card rounded-[2.5rem] overflow-hidden border border-white/5">
+    <div class="glass-card card-animate rounded-[2.5rem] overflow-hidden border border-white/5">
         <div class="px-8 py-8 md:px-10 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
             <div>
                 <h3 class="text-2xl font-black text-white flex items-center gap-3 tracking-tight">

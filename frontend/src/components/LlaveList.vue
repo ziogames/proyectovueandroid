@@ -99,7 +99,7 @@ onMounted(() => {
 <template>
   <div class="space-y-12">
     <!-- Form Card -->
-    <div v-if="isAdmin" class="glass-card rounded-[2.5rem] p-8 lg:p-10 relative overflow-hidden group">
+    <div v-if="isAdmin" class="glass-card card-animate rounded-[2.5rem] p-8 lg:p-10 relative overflow-hidden group">
         <!-- Decoration -->
         <div class="absolute top-0 right-0 w-32 h-32 bg-violet-600/10 rounded-full blur-3xl group-hover:bg-violet-600/20 transition-all duration-700"></div>
         
@@ -169,7 +169,7 @@ onMounted(() => {
 
     <!-- Inventory Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
-        <div v-for="llave in llaves" :key="llave.id" class="glass-card rounded-[2rem] overflow-hidden flex flex-col group hover:ring-2 hover:ring-violet-500/20 transition-all duration-500 hover:translate-y-[-4px]">
+        <div v-for="llave in llaves" :key="llave.id" class="glass-card card-animate rounded-[2rem] overflow-hidden flex flex-col group hover:ring-2 hover:ring-violet-500/20 transition-all duration-500">
             <div class="relative h-56 bg-slate-950/50 overflow-hidden">
                 <img v-if="llave.img" :src="llave.img" alt="Llave" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div v-else class="w-full h-full flex items-center justify-center bg-slate-900/80">
@@ -227,7 +227,7 @@ onMounted(() => {
     </div>
 
     <!-- Empty State -->
-    <div v-if="llaves.length === 0" class="glass-card rounded-[2.5rem] p-20 text-center flex flex-col items-center justify-center">
+    <div v-if="llaves.length === 0" class="glass-card card-animate rounded-[2.5rem] p-20 text-center flex flex-col items-center justify-center">
         <div class="w-24 h-24 rounded-3xl bg-slate-900 border border-white/5 flex items-center justify-center mb-6">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
